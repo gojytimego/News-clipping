@@ -39,15 +39,6 @@
     letter-spacing: .8px; text-transform: uppercase;
     padding: 0 18px 8px;
   }
-  .nav-item {
-    display: block; padding: 7px 18px 7px 26px;
-    font-size: 13px; color: rgba(255,255,255,.7);
-    cursor: pointer; border-radius: 0;
-    transition: background .12s, color .12s;
-    border-left: 3px solid transparent;
-    text-decoration: none;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
   .nav-item:hover { background: rgba(255,255,255,.07); color: white; }
   .nav-item.active {
     background: rgba(255,255,255,.12);
@@ -55,6 +46,28 @@
     border-left-color: #60a5fa;
   }
   .nav-divider { height: 1px; background: rgba(255,255,255,.07); margin: 8px 14px; }
+
+  .nav-month-header {
+    display: flex; align-items: center; gap: 5px;
+    padding: 5px 18px;
+    font-size: 11px; font-weight: 700;
+    color: rgba(255,255,255,.45);
+    cursor: pointer; user-select: none;
+    transition: color .12s;
+  }
+  .nav-month-header:hover { color: rgba(255,255,255,.75); }
+  .nav-month-arrow {
+    font-size: 9px; display: inline-block;
+    transition: transform .18s;
+  }
+  .nav-month-header.open .nav-month-arrow { transform: rotate(90deg); }
+  .nav-item {
+    display: block; padding: 7px 18px 7px 30px;
+    font-size: 13px; color: rgba(255,255,255,.7);
+    cursor: pointer; transition: background .12s, color .12s;
+    border-left: 3px solid transparent;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
 
   /* 콘텐츠 패널 */
   .content-panel {
@@ -184,7 +197,7 @@
   </div>
   <div style="text-align:right;font-size:12px;opacity:.7;line-height:1.8">
     <div>작성자: 전략기획팀 박지영</div>
-    <div>최근 업데이트: 2026-07-08 13:36</div>
+    <div>최근 업데이트: 2026-07-08 14:13</div>
   </div>
 </div>
 
@@ -192,12 +205,12 @@
   <nav class="sidebar">
     <div class="nav-section">
       <div class="nav-section-title">일일 클리핑</div>
-      <div class="nav-item" data-file="2026-07-08-daily.html">26.07.08 일일 클리핑</div><div class="nav-item" data-file="2026-07-07-daily.html">26.07.07 일일 클리핑</div><div class="nav-item" data-file="2026-07-06-daily.html">26.07.06 일일 클리핑</div><div class="nav-item" data-file="2026-06-30-daily.html">26.06.30 일일 클리핑</div><div class="nav-item" data-file="2026-06-29-daily.html">26.06.29 일일 클리핑</div><div class="nav-item" data-file="2026-06-28-daily.html">26.06.28 일일 클리핑</div><div class="nav-item" data-file="2026-06-27-daily.html">26.06.27 일일 클리핑</div><div class="nav-item" data-file="2026-06-26-daily.html">26.06.26 일일 클리핑</div>
+      <div class="nav-month-header open"><span class="nav-month-arrow">▸</span>26.07월</div><div class="nav-month-items"><div class="nav-item" data-file="2026-07-08-daily.html">26.07.08 일일 클리핑</div><div class="nav-item" data-file="2026-07-07-daily.html">26.07.07 일일 클리핑</div><div class="nav-item" data-file="2026-07-06-daily.html">26.07.06 일일 클리핑</div></div><div class="nav-month-header"><span class="nav-month-arrow">▸</span>26.06월</div><div class="nav-month-items" style="display:none"><div class="nav-item" data-file="2026-06-30-daily.html">26.06.30 일일 클리핑</div><div class="nav-item" data-file="2026-06-29-daily.html">26.06.29 일일 클리핑</div><div class="nav-item" data-file="2026-06-28-daily.html">26.06.28 일일 클리핑</div><div class="nav-item" data-file="2026-06-27-daily.html">26.06.27 일일 클리핑</div><div class="nav-item" data-file="2026-06-26-daily.html">26.06.26 일일 클리핑</div></div>
     </div>
     <div class="nav-divider"></div>
     <div class="nav-section">
       <div class="nav-section-title">주간 클리핑</div>
-      <div class="nav-item" data-file="2026-07-W1-weekly.html">26.07.1W 주간 클리핑</div><div class="nav-item" data-file="2026-06-W4-weekly.html">26.06.4W 주간 클리핑</div><div class="nav-item" data-file="2026-06-W3-weekly.html">26.06.3W 주간 클리핑</div>
+      <div class="nav-month-header open"><span class="nav-month-arrow">▸</span>26.07월</div><div class="nav-month-items"><div class="nav-item" data-file="2026-07-W1-weekly.html">26.07.1W 주간 클리핑</div></div><div class="nav-month-header"><span class="nav-month-arrow">▸</span>26.06월</div><div class="nav-month-items" style="display:none"><div class="nav-item" data-file="2026-06-W4-weekly.html">26.06.4W 주간 클리핑</div><div class="nav-item" data-file="2026-06-W3-weekly.html">26.06.3W 주간 클리핑</div></div>
     </div>
   </nav>
 
@@ -248,6 +261,14 @@ async function loadFile(fname) {
 
 document.querySelectorAll('.nav-item').forEach(el => {
   el.addEventListener('click', () => loadFile(el.dataset.file));
+});
+
+document.querySelectorAll('.nav-month-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const items = header.nextElementSibling;
+    const isOpen = header.classList.toggle('open');
+    items.style.display = isOpen ? '' : 'none';
+  });
 });
 
 function openModal() {
